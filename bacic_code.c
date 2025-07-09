@@ -64,3 +64,26 @@ int main(void){
     printf("ptr 1 is :%d\n" , *ptr) ;
     printf("ptr 2 is :%d\n" , **ptr2) ;
 }
+
+//Another simple example 
+#include <stdio.h>
+#include <stdlib.h>
+int main(void) {
+    int n = 10;
+    int *array = (int *)malloc(n * sizeof(int));
+    if (array == NULL) {
+        perror("Failed to allocate !");
+        return -1;
+    }
+    for (int i = 0; i < n; i++) {
+        array[i] = i + 1;
+        printf("array is :%d\n", array[i]);
+    }
+    long long int product = 1;
+    for (int i = 0; i < n; i++) {
+        product *= array[i];
+    }
+    printf("The Product of array is :%lld\n", product);
+    free(array);
+    return 0;
+}
