@@ -98,3 +98,89 @@ int main() {
     return 0;
 }
 
+//Another simple example to copy from source to destination  
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void *my_memcpy(void *dst, const void *src, size_t n) {
+    if (dst == NULL || src == NULL) {
+        fprintf(stderr, "[FATAL] Null pointer passed to my_memcpy()\n");
+        exit(EXIT_FAILURE);
+    }
+    const unsigned char *s = (const unsigned char *)src;
+    unsigned char *d = (unsigned char *)dst;
+    while (n-- > 0) {
+        *d++ = *s++;
+    }
+    return dst;
+}
+int main(void) {
+    const char src[] = "Rose Sir !";
+    char dest[20] = {0};  // static buffer, zero initialized at compile-time
+    size_t size = strlen(src) + 1;
+    if (size > sizeof(dest)) {
+        fprintf(stderr, "[ERROR] Source string is too large for destination buffer!\n");
+        return 1;
+    }
+    my_memcpy(dest, src, size);
+    printf("Dst copied as: %s\n", dest);
+    return 0;
+}
+//Another simple example to copy form source to dst with using memset
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void *my_memcpy(void *dst, const void *src, size_t n) {
+    if (dst == NULL || src == NULL) {
+        fprintf(stderr, "[FATAL] Null pointer passed to my_memcpy()\n");
+        exit(EXIT_FAILURE);
+    }
+
+    const unsigned char *s = (const unsigned char *)src;
+    unsigned char *d = (unsigned char *)dst;
+
+    while (n-- > 0) {
+        *d++ = *s++;
+    }
+
+    return dst;
+}
+
+int main(void) {
+    const char src[] = "Rose Sir !";
+    char dest[20];                         // uninitialized
+    memset(dest, 0, sizeof(dest));         // please initialize with 0 to overcome all kinds of garbage value!
+    size_t size = strlen(src) + 1;
+    if (size > sizeof(dest)) {
+        fprintf(stderr, "[ERROR] Source string is too large for destination buffer!\n");
+        return 1;
+    }
+    my_memcpy(dest, src, size);
+    printf("Dst copied as: %s\n", dest);
+    return 0;
+}
+
+//another simple example of a little bit of Bare metal way 
+#include <stdio.h>
+#include <stdlib.h>
+// Extreme raw memory set function: fills 'n' bytes at 'ptr' with value 'val'
+void *my_memset(void *ptr, int val, size_t n) {
+    if (ptr == NULL) {
+        fprintf(stderr, "[FATAL] Null pointer passed to my_memset()\n");
+        exit(EXIT_FAILURE);
+    }
+    unsigned char *p = (unsigned char *)ptr;
+    while (n-- > 0) {
+        *p++ = (unsigned char)val;
+    }
+    return ptr;
+}
+int main(void) {
+    char buffer[20];
+    my_memset(buffer, 0, sizeof(buffer));
+    my_memset(buffer, 0x41, 10);
+    buffer[10] = '\0';
+    printf("Buffer content: %s\n", buffer); 
+    return 0;
+}
